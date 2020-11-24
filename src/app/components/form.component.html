@@ -1,0 +1,7 @@
+<p>form works!</p>
+
+<!-- #myTodo is a template reference . At Form component, the parent, give a reference to the child e.g. #Todo
+viewchild from form.ts file-->
+<app-todo #myTodo></app-todo>
+<button type="button" [routerLink]="['/']">Home</button>
+<button (click)="addToDo()" type='button'>Add to do</button>

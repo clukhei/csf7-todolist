@@ -1,0 +1,8 @@
+<h1>Home </h1>
+<button type="button" [routerLink]="['/form']">Create</button>
+<hr>
+<div>
+<ul *ngFor="let todo of todos; let i = index">
+    <li><div (click)= goToDetails(todo.id) >{{todo.id}} {{todo.title}}</div></li>
+</ul>
+</div>
