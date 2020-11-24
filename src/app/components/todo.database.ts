@@ -36,4 +36,11 @@ export class TodoDatabase extends Dexie {
     async getSingleToDoDetail (id:string): Promise<Todo> {
         return await this.todo.get(id)
     }
+    async deleteTodo(id:string): Promise<any> {
+        return await this.todo.where('id').equals(id).delete()
+    }
+
+    async updateTodo(t: Todo): Promise<any>{
+        return await this.todo.where('id').equals(t.id).modify(t)
+    }
 }

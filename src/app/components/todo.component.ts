@@ -51,9 +51,10 @@ export class TodoComponent implements OnInit {
     console.log(this.toDoForm.value)
   }
 
-  delete(i) {
-    this.tasksArray.controls.splice(i, 1)
-    console.log(this.tasksArray)
+  delete(i: number) {
+ 
+    this.tasksArray.removeAt(i)
+
   }
 
   get todo(): Todo {
@@ -65,7 +66,7 @@ export class TodoComponent implements OnInit {
   @Input() set todo(t: Todo) {
     //leave it
     if (t) {
-      const taskGroup = t.tasks.forEach(task => {
+      t.tasks.forEach(task => {
         const eachTask = this.fb.group({
           description: this.fb.control(task.description),
           priority: this.fb.control(task.priority)
