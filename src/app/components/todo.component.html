@@ -4,6 +4,7 @@
     </div>
     <div>
         <input type="text" placeholder="Please enter title" size="40" formControlName="title">
+        <input type="file" accept="image/*" #imageFile formControlName="imageFile" id="imgFile">
         <button type="button" (click)="addTask()">Add Task</button>
         <button type="button" (click)=showValues()>Show</button>
     </div>
@@ -19,13 +20,12 @@
             <tbody formArrayName ="tasks">
                 <tr *ngFor ="let t of tasksArray.controls; let i = index" [formGroup]="t">
                     <td>
-                        <input type="text" placeholder="Sub task description"size="50" formControlName="description">
+                        <input type="text" placeholder="Sub task description"size="50" formControlName="subtaskTitle">
                     </td>
                     <td>
-                        <select formControlName="priority">
-                            <option value="0">Low</option>
-                            <option value="1">Medium</option>
-                            <option value="2">High</option>
+                        <select formControlName="subtaskStatus">
+                            <option value="0">Not Complete</option>
+                            <option value="1">Completed</option>
                         </select>
                     </td>
                     <td>

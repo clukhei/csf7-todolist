@@ -3,6 +3,6 @@
 <hr>
 <button type="button" [routerLink]="['/']">Back</button>
 
-<app-todo #myTodo [todo]="todoDetail"></app-todo>
+<app-todo #myTodo [todo]="todoDetail" [subtaskId]="nextSubtaskId"></app-todo>
 <button type="button" (click)="updateTodo()">Update</button>
 <button type="button" (click)="deleteTodo()">Delete</button>

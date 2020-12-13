@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { VariableAst } from '@angular/compiler';
+import { variable } from '@angular/compiler/src/output/output_ast';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { Todo } from './models'
 @Component({
@@ -7,7 +9,7 @@ import { Todo } from './models'
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent implements OnInit {
-
+  @ViewChild('imageFile') imageFile: ElementRef
   toDoForm: FormGroup
   tasksArray: FormArray
   constructor(private fb: FormBuilder) { }
@@ -22,28 +24,26 @@ export class TodoComponent implements OnInit {
 
   //return the whole form
   private createToDo(): FormGroup {
-    // this.tasksArray = this.fb.array([])
+   
     return this.fb.group({
       title: this.fb.control('', [Validators.required]),
-      tasks: this.fb.array([])  //this.taskArray
+      tasks: this.fb.array([]),  //this.taskArray
+      imageFile: this.fb.control('')
     })
   }
-  /*  private createTask(){
-       const taskGroup =  this.fb.group({
-         description: this.fb.control(''),
-         quantity: this.fb.control(0)
-       })
-       this.tasksArray.push(taskGroup)
-   } */
+
 
   private createTask(): FormGroup {
+    console.log(this.subtaskId)
     return this.fb.group({
-      description: this.fb.control(''),
-      priority: this.fb.control(0)
+      subtaskId: this.fb.control(this.subtaskId),
+      subtaskTitle: this.fb.control(''),
+      subtaskStatus: this.fb.control(0)
     })
   }
 
   addTask() {
+    this.subtaskId++
     const task = this.createTask()
     this.tasksArray.push(task)
   }
@@ -56,25 +56,35 @@ export class TodoComponent implements OnInit {
     this.tasksArray.removeAt(i)
 
   }
+  nextsubId: number
 
-  get todo(): Todo {
-    return this.toDoForm.value as Todo
+  @Input() set subtaskId(id){
+    this.nextsubId = id
+  } 
+  get subtaskId(){
+    return this.nextsubId
+  }
+  get todo() {
+    return this.toDoForm.value
   }
 
 
-  @Input() set todo(t: Todo) {
+  @Input() set todo(t) {
+    
     if (t) {
-      t.tasks.forEach(task => {
+      t.forEach(task => {
         const eachTask = this.fb.group({
-          description: this.fb.control(task.description),
-          priority: this.fb.control(task.priority)
+          subtaskId: this.fb.control(task.subtaskId),
+          subtaskTitle: this.fb.control(task.subtaskTitle),
+          subtaskStatus: this.fb.control(task.subtaskStatus)
         })
         return this.tasksArray.push(eachTask)
       })
 
       this.toDoForm = this.fb.group({
-        title: this.fb.control(t.title),
-        tasks: this.tasksArray
+        title: this.fb.control(t[0].mainTaskTitle),
+        tasks: this.tasksArray,
+        imageFile: this.fb.control("")
       })
 
     }

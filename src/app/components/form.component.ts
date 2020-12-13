@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { TodoComponent } from './todo.component';
 import { TodoDatabase } from './todo.database';
 import { v4 as uuidv4 } from 'uuid';
+import {HttpClient} from '@angular/common/http'
 
 @Component({
   selector: 'app-form',
@@ -11,22 +12,29 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class FormComponent implements OnInit {
   @ViewChild('myTodo') //name of template reference without the hash
-    todoRef: TodoComponent
-  constructor(private todoDB: TodoDatabase, private router: Router) { }
+  todoRef: TodoComponent
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  async addToDo(){
-   
-    const id = uuidv4().toString().substring(0,8)
+  async addToDo() {
+    
+  
+    const todoForm = this.todoRef.toDoForm
+    console.log(todoForm.get('tasks').value)
+    const formData = new FormData()
+    formData.set('mainTaskTitle',todoForm.get('title').value)
+    formData.set('subtasks', JSON.stringify(todoForm.get('tasks').value))
+    console.log(this.todoRef.imageFile)
+    formData.set('imageFile', this.todoRef.imageFile.nativeElement.files[0])
+    console.log(formData.get('imageFile'))
+    this.http.post(`http://localhost:3000/insert`, formData)
+      .toPromise()
+      .then(res=> console.log(res))
+      .catch(e=> console.log(e))
 
-    const todo = this.todoRef.todo
-    todo.id = id
-
-    await this.todoDB.addTodo(todo)
-    this.router.navigate(['/'])
-    console.log('add to do', this.todoRef)
-   
+      this.router.navigate(['/'])
   }
+  
 }

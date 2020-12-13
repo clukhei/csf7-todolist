@@ -10,6 +10,7 @@ import {MatTableModule} from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TodoDatabase } from './components/todo.database';
 import { TodoDetailComponent } from './components/todo-detail.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 const ROUTES : Routes = [
@@ -33,7 +34,8 @@ const ROUTES : Routes = [
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
   providers: [TodoDatabase],
   bootstrap: [AppComponent]

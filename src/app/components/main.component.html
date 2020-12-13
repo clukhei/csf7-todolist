@@ -4,5 +4,7 @@
 <div>
 <ul *ngFor="let todo of todos; let i = index">
     <li><div (click)= goToDetails(todo.id) >{{todo.id}} {{todo.title}}</div></li>
+    <div *ngFor="let st of todo.subtasks"><li>{{st.subtaskTitle}}  status: {{st.subtaskStatus}}</li></div>
+    <li><img [src]="todo.image" alt="image"></li>
 </ul>
 </div>

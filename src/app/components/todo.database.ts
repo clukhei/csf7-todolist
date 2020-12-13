@@ -23,16 +23,16 @@ export class TodoDatabase extends Dexie {
         return await this.todo.put(t)
     }
 
-    async getTodoSummary(): Promise<TodoSummary[]> {
-        return (await this.todo.toArray())
-            .map(d => {
-                return {
-                    id: d.id,
-                    title: d.title
-                } as TodoSummary
-            })
+    // async getTodoSummary(): Promise<TodoSummary[]> {
+    //     return (await this.todo.toArray())
+    //         .map(d => {
+    //             return {
+    //                 id: d.id,
+    //                 title: d.title
+    //             } as TodoSummary
+    //         })
             
-    }
+    // }
     async getSingleToDoDetail (id:string): Promise<Todo> {
         return await this.todo.get(id)
     }

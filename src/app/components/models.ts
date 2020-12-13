@@ -4,8 +4,8 @@ export enum Priority{
 }
 
 export interface Task{
-    description: string;
-    priority: Priority
+    subtaskTitle: string;
+    subtaskStatus: number
 }
 
 export interface Todo{
@@ -15,6 +15,8 @@ export interface Todo{
 }
 
 export interface TodoSummary {
-    id: string;
+    id: number;
     title:string;
+    image: string;
+    subtasks: Task[]
 }
