@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { VariableAst } from '@angular/compiler';
 import { variable } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
@@ -12,14 +13,25 @@ export class TodoComponent implements OnInit {
   @ViewChild('imageFile') imageFile: ElementRef
   toDoForm: FormGroup
   tasksArray: FormArray
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private http: HttpClient) { }
 
 
-
+  subtaskId: number
   ngOnInit(): void {
     this.toDoForm = this.createToDo()
     //assigning taskArray name to the FormArray created in line 18
     this.tasksArray = this.toDoForm.get('tasks') as FormArray
+
+    this.http.get(`http://localhost:3000/nextsubtaskId`)
+      .toPromise()
+      .then(res=>{
+        if (res['nextSubtaskId']){
+          this.subtaskId = res['nextSubtaskId'] -1
+        } else {
+          this.subtaskId = 0
+        }
+        
+      })
   }
 
   //return the whole form
@@ -58,21 +70,22 @@ export class TodoComponent implements OnInit {
   }
   nextsubId: number
 
-  @Input() set subtaskId(id){
+  /* @Input() set subtaskId(id){
     this.nextsubId = id
   } 
   get subtaskId(){
     return this.nextsubId
-  }
+  } */
   get todo() {
     return this.toDoForm.value
   }
 
 
   @Input() set todo(t) {
-    
+    console.log(t)
     if (t) {
       t.forEach(task => {
+
         const eachTask = this.fb.group({
           subtaskId: this.fb.control(task.subtaskId),
           subtaskTitle: this.fb.control(task.subtaskTitle),

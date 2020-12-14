@@ -12,7 +12,7 @@ import { TodoDatabase } from './todo.database';
 export class TodoDetailComponent implements OnInit {
   @ViewChild('myTodo')
   todoRef: TodoComponent
-  todoId: string = ''
+  todoId: number
   nextSubtaskId: number
   todoDetail: any
   constructor(private activatedRoute: ActivatedRoute, private router: Router, private http: HttpClient) { }
@@ -21,13 +21,11 @@ export class TodoDetailComponent implements OnInit {
     this.todoId = this.activatedRoute.snapshot.params['todoId']
     this.http.get(`http://localhost:3000/task/${this.todoId}`)
       .toPromise()
-      .then(result => this.todoDetail = result)
-      .then(()=> {
-       return this.http.get(`http://localhost:3000/nextsubtaskId`)
-        .toPromise()
-        
+      .then(result => {
+        console.log(result)
+        this.todoDetail = result
       })
-      .then(res=> this.nextSubtaskId = res['nextSubtaskId'])
+      .catch(err=> console.log(err))
    
     
     //this.todoDB.getSingleToDoDetail(this.todoId)
@@ -46,14 +44,22 @@ export class TodoDetailComponent implements OnInit {
       .toPromise()
       .then(res => console.log(res))
       .catch(e=> console.log(e))
-     //formData.set('imageFile')
-   // this.todoDB.updateTodo(todoForUpdate)
-  //  this.router.navigate(['/'])
+
+     this.router.navigate(['/'])
 
   }
   deleteTodo() {
    // this.todoDB.deleteTodo(this.todoId)
-    this.router.navigate(['/'])
+
+
+   this.http.delete(`http://localhost:3000/delete/${this.todoId}`)
+    .toPromise()
+    .then(resp=> {
+      console.log(resp)
+      this.router.navigate(['/'])
+    })
+   
+  
     
   }
 }
